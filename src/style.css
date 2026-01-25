@@ -35,7 +35,6 @@ a:focus,
     outline: 2px solid var(--red-500);
     outline-offset: 2px;
     border: none;
-    
 }
 
 header {
@@ -100,6 +99,7 @@ section nav a {
     color: var(--neutral-700);
     font: 500 1rem myFont;
     border: 1px solid var(--neutral-300);
+    margin-right: 0.2em;
 }
 
 section nav a:hover {
@@ -205,20 +205,19 @@ main {
     top: -100vh;
     left: 50%;
     opacity: 0;
-    transform: translate(-50%) scale(1.15);
+    transform: translate(-50%) scale(0.95);
     text-align: center;
     border: none;
-    transition: all 200ms ease-in-out allow-discrete;
+    transition: all 0.3s ease allow-discrete;
 }
 
 .modal::backdrop {
-    background: rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 100ms ease-in-out 200ms allow-discrete;
+    background: rgba(0, 0, 0, 0);
+    transition: all 0.3s ease allow-discrete;
 }
 
 .modal[open]::backdrop {
-    opacity: 1;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .modal[open] {
@@ -229,12 +228,11 @@ main {
 
 @starting-style {
     .modal[open]::backdrop {
-        opacity: 0;
+        background: rgba(0, 0, 0, 0);
     }
     .modal[open] {
         opacity: 0;
-        top: -100vh;
-        transform: translate(-50%) scale(1.15);
+        transform: translate(-50%) scale(0.95);
     }
 }
 

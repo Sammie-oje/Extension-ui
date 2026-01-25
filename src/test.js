@@ -22,7 +22,7 @@ const populateUI = extensions => {
             </div>
           </section>
           <div class="switch-wrapper">
-            <button class="remove-btn">Remove</button>
+            <button class="remove-btn" onClick="showDialog()">Remove</button>
             <div class="toggle-switch ${
                 item.isActive ? "active" : ""
             }" tabindex="0">
@@ -61,6 +61,46 @@ const switchToggle = element => {
     toggleSwitch.classList.toggle("active");
     element.classList.toggle("switch-active");
 };
+
+const showDialog = () => {
+    const dialog = document.createElement("dialog");
+    dialog.className = "modal";
+
+    dialog.innerHTML = `
+      <p>
+       Are you sure you want to remove this extension. 
+       This action is <strong><em>irreversible</em></strong>
+      </p>
+      <div id="btn-wrapper">
+        <button id="continue-btn">Continue</button>
+        <button id="cancel-btn">Cancel</button>
+      </div>`;
+
+    document.body.appendChild(dialog);
+    dialog.showModal();
+
+    //Cleanup dialog
+    const cancelBtn = dialog.querySelector("#cancel-btn");
+    cancelBtn.addEventListener("click", () => {
+        dialog.close();
+        dialog.remove();
+    });
+};
+
+//Toggle focus state for nav links
+const nav = document.querySelector("nav");
+//Add event listener to the parent element, find if the clicked element is coming from an <a> tag, then remove the class from tge focused element and add to the target element
+nav.addEventListener("click", e => {
+    const link = e.target.closest("a");
+    //If it's not a link that is clicked, exit the function
+    if (!link) return;
+
+    const focusedLink = nav.querySelector(".focus");
+    //If no element is focused without a click
+    focusedLink?.classList.remove("focus");
+    //Add focus class to the clicked link
+    link.classList.add("focus");
+});
 
 const filterExtensions = filterType => {
     const extensions = document.querySelectorAll(".extension-info");
