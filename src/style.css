@@ -51,7 +51,7 @@ header {
     position: -webkit-sticky;
 }
 
-.focus {
+/*.focus {
     background-color: var(--red-700);
     color: white;
     border: none;
@@ -60,7 +60,7 @@ header {
 
 .focus:hover {
     background-color: var(--red-500);
-}
+}*/
 
 header button {
     background-color: var(--neutral-100);
@@ -91,9 +91,13 @@ section h3 {
     color: var(--neutral-900);
 }
 
+section nav {
+    position: relative;
+}
+
 section nav a {
     text-decoration: none;
-    background-color: white;
+    background-color: transparent;
     padding: 0.6em 1.2em;
     border-radius: 1.5em;
     color: var(--neutral-700);
@@ -102,10 +106,24 @@ section nav a {
     margin-right: 0.2em;
 }
 
+nav .indicator {
+    transition:
+        transform 0.3s ease-in-out,
+        width 0.3s ease-in-out;
+    border-radius: 1.5em;
+    position: absolute;
+    bottom: -9.6px;
+    left: 0;
+    width: 0;
+    background-color: var(--red-700);
+    height: 0;
+    z-index: -10;
+}
+
 section nav a:hover {
     box-shadow: none;
     color: var(--neutral-800);
-    background-color: var(--neutral-0);
+    background-color: transparent;
 }
 
 main {
@@ -301,18 +319,19 @@ body.dark section h3 {
 }
 
 body.dark section nav a {
-    background-color: var(--neutral-700);
+    /*background-color:var(--neutral-700);*/
+    background-color: transparent;
     color: white;
     border: 1px solid var(--neutral-600);
     box-shadow: none;
 }
 
-body.dark .focus {
+/*body.dark .focus {
     background-color: var(--red-500);
     color: var(--neutral-900);
     border: none;
     box-shadow: none;
-}
+}*/
 
 body.dark .extension-info {
     background-color: var(--neutral-700);
