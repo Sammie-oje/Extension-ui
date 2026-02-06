@@ -1,19 +1,30 @@
+let data;
+
 async function fetchUI() {
     try {
         const response = await fetch("src/data.json");
-        const data = await response.json();
-        populateUI(data);
+        data = await response.json();
     } catch {
         console.error("There was an error fetching the data");
     }
 }
 
+fetchUI();
+
+window.onload = () => {
+    const allLink = document.querySelector("#all");
+    allLink.click();
+    populateUI(data);
+};
+
 const populateUI = extensions => {
     const mainEl = document.querySelector("main");
-    mainEl.innerHTML = extensions
-        .map(
-            item => `
-        <article class="extension-info" id="${item.name}">
+    mainEl.innerHTML = extensions.map(item => extensionCard(item)).join("");
+};
+
+const extensionCard = item => {
+    return `
+    <article class="extension-info" id="${item.name}">
           <section class="extension-main">
             <img src="${item.logo}" alt="${item.name}">
             <div class="extension-text">
@@ -32,9 +43,7 @@ const populateUI = extensions => {
             </div>
           </div>
         </article>
-        `
-        )
-        .join("");
+        `;
 };
 
 const toggleTheme = () => {
@@ -105,21 +114,28 @@ nav.addEventListener("click", e => {
     focusedLink?.classList.remove("focus");
     //Add focus class to the clicked link
     link.classList.add("focus");
+
+    /*
+    -Get the textContent of the clicked link
+    -Then filter the extensions based in the "filterType"
+    */
+    const filterType = link.textContent;
+    filterExtensions(filterType);
 });
 
-window.onload = () => {
-    const allLink = document.querySelector("#all");
-    allLink.click()
+const filterExtensions = filterParam => {
+    let filteredData;
+
+    if (filterParam === "Active") {
+        filteredData = data.filter(item => item.isActive === true);
+        populateUI(filteredData);
+    } else if (filterParam === "Inactive") {
+        filteredData = data.filter(item => item.isActive !== true);
+        populateUI(filteredData);
+    } else if (filterParam === "All") {
+        populateUI(data);
+        return;
+    }
 };
 
-const filterExtensions = filterType => {
-    const extensions = document.querySelectorAll(".extension-info");
 
-    [...extensions].map(ext => {
-        const switchEl = ext.querySelector(".switch");
-        const isActive = switchEl.classList.contains("switch-active");
-        return isActive;
-    });
-};
-
-fetchUI();
