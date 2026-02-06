@@ -1,26 +1,29 @@
-let data;
-
-async function fetchUI() {
+const fetchUI = async () => {
     try {
         const response = await fetch("src/data.json");
-        data = await response.json();
-    } catch {
-        console.error("There was an error fetching the data");
+        const data = await response.json();
+        return data;
+    } catch (e) {
+        console.error("There was an error fetching the data", e);
     }
-}
-
-fetchUI();
-
-window.onload = () => {
-    const allLink = document.querySelector("#all");
-    allLink.click();
-    populateUI(data);
 };
 
 const populateUI = extensions => {
     const mainEl = document.querySelector("main");
     mainEl.innerHTML = extensions.map(item => extensionCard(item)).join("");
 };
+
+//If the browser is done loading and parsing, call the function, if not call the "onload" normally
+if (document.readyState === "complete") {
+    fetchUI().then(data => populateUI(data));
+} else {
+    window.onload = () => {
+        const allLink = document.querySelector("#all");
+        allLink.click();
+
+        fetchUI().then(data => populateUI(data));
+    };
+}
 
 const extensionCard = item => {
     return `
@@ -91,7 +94,9 @@ const showDialog = () => {
     //Cleanup dialog
     const cancelBtn = dialog.querySelector("#cancel-btn");
     cancelBtn.addEventListener("click", () => {
+        //Remove from the UI
         dialog.close();
+        //Remove from the DOM
         dialog.remove();
     });
 };
@@ -116,26 +121,24 @@ nav.addEventListener("click", e => {
     link.classList.add("focus");
 
     /*
-    -Get the textContent of the clicked link
-    -Then filter the extensions based in the "filterType"
-    */
+  -Get the textContent of the clicked link
+  -Then filter the extensions based in the "filterType"
+  */
     const filterType = link.textContent;
     filterExtensions(filterType);
 });
 
 const filterExtensions = filterParam => {
-    let filteredData;
-
     if (filterParam === "Active") {
-        filteredData = data.filter(item => item.isActive === true);
-        populateUI(filteredData);
+        fetchUI().then(data =>
+            populateUI(data.filter(item => item.isActive === true))
+        );
     } else if (filterParam === "Inactive") {
-        filteredData = data.filter(item => item.isActive !== true);
-        populateUI(filteredData);
+        fetchUI().then(data =>
+            populateUI(data.filter(item => item.isActive !== true))
+        );
     } else if (filterParam === "All") {
-        populateUI(data);
+        fetchUI().then(data => populateUI(data));
         return;
     }
 };
-
-
