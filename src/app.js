@@ -1,29 +1,19 @@
-const fetchUI = async () => {
-    try {
-        const response = await fetch("src/data.json");
-        const data = await response.json();
-        return data;
-    } catch (e) {
-        console.error("There was an error fetching the data", e);
-    }
-};
+import data from "./data.json" assert { type: "json" };
+
+let updatedExtensionData;
 
 const populateUI = extensions => {
     const mainEl = document.querySelector("main");
     mainEl.innerHTML = extensions.map(item => extensionCard(item)).join("");
 };
 
-//If the browser is done loading and parsing, call the function, if not call the "onload" normally
-if (document.readyState === "complete") {
-    fetchUI().then(data => populateUI(data));
-} else {
-    window.onload = () => {
-        const allLink = document.querySelector("#all");
-        allLink.click();
+//When the HTML and styles are ready, populate the UI with the extensions
 
-        fetchUI().then(data => populateUI(data));
-    };
-}
+window.onload = () => {
+    const allLink = document.querySelector("#all");
+    allLink.click();
+    populateUI(data);
+};
 
 const extensionCard = item => {
     return `
@@ -40,9 +30,7 @@ const extensionCard = item => {
             <div class="toggle-switch ${
                 item.isActive ? "active" : ""
             }" tabindex="0">
-              <div class="switch ${
-                  item.isActive ? "switch-active" : ""
-              }" onClick="switchToggle(this)"></div>
+              <div class="switch ${item.isActive ? "switch-active" : ""}" onClick="toggleSwitch(this)"></div>
             </div>
           </div>
         </article>
@@ -68,13 +56,33 @@ const toggleTheme = () => {
 const themeToggle = document.getElementById("toggle-theme");
 themeToggle.addEventListener("click", () => toggleTheme());
 
-const switchToggle = element => {
-    const toggleSwitch = element.parentElement;
-    toggleSwitch.classList.toggle("active");
-    element.classList.toggle("switch-active");
+window.toggleSwitch = switchEl => {
+    const switchElContainer = switchEl.parentElement;
+    switchElContainer.classList.toggle("active");
+    switchEl.classList.toggle("switch-active");
+
+    filterOnToggle(switchEl);
 };
 
-const showDialog = () => {
+const filterOnToggle = switchEl => {
+    const isSwitchActive = switchEl.classList.contains("switch-active");
+    const articleEl = switchEl.closest("article");
+
+    updatedExtensionData = (
+        updatedExtensionData ? updatedExtensionData : data
+    ).map(extension => {
+        if (extension.name === articleEl.id) {
+            return {
+                ...extension,
+                isActive: isSwitchActive
+            };
+        }
+        return extension;
+    });
+    console.log(updatedExtensionData);
+};
+
+window.showDialog = () => {
     const dialog = document.createElement("dialog");
     dialog.className = "modal";
 
@@ -103,8 +111,10 @@ const showDialog = () => {
 
 //Toggle focus state for nav links
 const nav = document.querySelector("nav");
-const indicator = document.querySelector("nav .indicator");
-//Add event listener to the parent element, find if the clicked element is coming from an <a> tag, then remove the class from tge focused element and add to the target element
+const indicator = document.querySelector("nav #indicator");
+/*
+Add event listener to the parent element, find if the clicked element is coming from an <a> tag, then remove the class from tge focused element and add to the target element
+*/
 nav.addEventListener("click", e => {
     const link = e.target.closest("a");
     //If it's not a link that is clicked, exit the function
@@ -113,6 +123,7 @@ nav.addEventListener("click", e => {
     indicator.style.width = `${link.offsetWidth}px`;
     indicator.style.height = `${link.offsetHeight}px`;
     indicator.style.transform = `translateX(${link.offsetLeft}px)`;
+
 
     const focusedLink = nav.querySelector(".focus");
     //If no element is focused without a click
@@ -125,20 +136,19 @@ nav.addEventListener("click", e => {
   -Then filter the extensions based in the "filterType"
   */
     const filterType = link.textContent;
-    filterExtensions(filterType);
+    filterExtensions(
+        filterType,
+        updatedExtensionData ? updatedExtensionData : data
+    );
 });
 
-const filterExtensions = filterParam => {
+const filterExtensions = (filterParam, extensions) => {
     if (filterParam === "Active") {
-        fetchUI().then(data =>
-            populateUI(data.filter(item => item.isActive === true))
-        );
+        populateUI(extensions.filter(item => item.isActive === true));
     } else if (filterParam === "Inactive") {
-        fetchUI().then(data =>
-            populateUI(data.filter(item => item.isActive !== true))
-        );
+        populateUI(extensions.filter(item => item.isActive !== true));
     } else if (filterParam === "All") {
-        fetchUI().then(data => populateUI(data));
+        populateUI(extensions);
         return;
     }
 };
