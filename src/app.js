@@ -46,8 +46,8 @@ const changeView = () => {
     body.classList.toggle("dark");
     const isDarkModeActive = body.classList.contains("dark");
 
-    logo.src = `./assets/images/logo${isDarkModeActive ? "-dark" : ""}.svg`;
-    themeIcon.src = `./assets/images/icon-${isDarkModeActive ? "sun" : "moon"}.svg`;
+    logo.src = `/images/logo${isDarkModeActive ? "-dark" : ""}.svg`;
+    themeIcon.src = `/images/icon-${isDarkModeActive ? "sun" : "moon"}.svg`;
 };
 
 themeToggle.addEventListener("click", e => {
@@ -70,7 +70,10 @@ themeToggle.addEventListener("click", e => {
         //Animate the root's new view
         document.documentElement.animate(
             {
-              clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`]
+                clipPath: [
+                    `circle(0 at ${x}px ${y}px)`,
+                    `circle(${radius}px at ${x}px ${y}px)`
+                ]
             },
             {
                 duration: 500,

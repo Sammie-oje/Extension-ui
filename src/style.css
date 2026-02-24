@@ -21,7 +21,7 @@
 
 @font-face {
     font-family: myFont;
-    src: url(../assets/fonts/NotoSans-VariableFont_wdthwght.ttf);
+    src: url(/fonts/NotoSans-VariableFont_wdthwght.ttf);
 }
 
 body {
