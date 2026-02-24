@@ -79,19 +79,23 @@ function populateMainUI(el) {
 
 //Switch theme logic
 const themeToggle = document.getElementById("toggle-theme");
-themeToggle.addEventListener("click", () => {
+const changeView = () => {
     const body = document.body;
     const logo = document.getElementById("logo");
     const themeIcon = document.getElementById("theme-icon");
 
-    if (body.classList.contains("dark")) {
-        body.classList.remove("dark");
-        logo.src = "./assets/images/logo.svg";
-        themeIcon.src = "./assets/images/icon-moon.svg";
-    } else {
-        body.classList.add("dark");
-        logo.src = "./assets/images/logo-dark.svg";
-        themeIcon.src = "./assets/images/icon-sun.svg";
+    const isDarkModeActive = body.classList.contains("dark");
+    body.classList.toggle("dark");
+
+    logo.src = `./assets/images/logo-${isDarkModeActive ? "dark" : ""}.svg`;
+    themeIcon.src = `./assets/images/icon-${isDarkModeActive ? "moon" : "sun"}.svg`;
+};
+
+themeToggle.addEventListener("click", () => {
+    //Fallback for browsers that don't support the View Transition API
+    if (!document.startViewTransition) {
+        changeView();
+        return;
     }
 });
 

@@ -37,24 +37,50 @@ const extensionCard = item => {
         `;
 };
 
-const toggleTheme = () => {
+const themeToggle = document.getElementById("toggle-theme");
+const changeView = () => {
     const body = document.body;
     const logo = document.getElementById("logo");
     const themeIcon = document.getElementById("theme-icon");
 
-    if (body.classList.contains("dark")) {
-        body.classList.remove("dark");
-        logo.src = "./assets/images/logo.svg";
-        themeIcon.src = "./assets/images/icon-moon.svg";
-    } else {
-        body.classList.add("dark");
-        logo.src = "./assets/images/logo-dark.svg";
-        themeIcon.src = "./assets/images/icon-sun.svg";
-    }
+    body.classList.toggle("dark");
+    const isDarkModeActive = body.classList.contains("dark");
+
+    logo.src = `./assets/images/logo${isDarkModeActive ? "-dark" : ""}.svg`;
+    themeIcon.src = `./assets/images/icon-${isDarkModeActive ? "sun" : "moon"}.svg`;
 };
 
-const themeToggle = document.getElementById("toggle-theme");
-themeToggle.addEventListener("click", () => toggleTheme());
+themeToggle.addEventListener("click", e => {
+    const x = e.clientX;
+    const y = e.clientY;
+
+    const radius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+    );
+    //Fallback for browsers that don't support the View Transition API
+    if (!document.startViewTransition) {
+        changeView();
+        return;
+    }
+
+    const transition = document.startViewTransition(() => changeView());
+
+    transition.ready.then(() => {
+        //Animate the root's new view
+        document.documentElement.animate(
+            {
+              clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`]
+            },
+            {
+                duration: 500,
+                easing: "ease-in",
+                //Specify which pseudo element to animate
+                pseudoElement: "::view-transition-new(root)"
+            }
+        );
+    });
+});
 
 window.toggleSwitch = switchEl => {
     const switchElContainer = switchEl.parentElement;
@@ -123,7 +149,6 @@ nav.addEventListener("click", e => {
     indicator.style.width = `${link.offsetWidth}px`;
     indicator.style.height = `${link.offsetHeight}px`;
     indicator.style.transform = `translateX(${link.offsetLeft}px)`;
-
 
     const focusedLink = nav.querySelector(".focus");
     //If no element is focused without a click
