@@ -97,7 +97,7 @@ section nav {
 
 section nav a {
     text-decoration: none;
-    background-color: var(--neutral-0);
+    background-color: hsla(200, 60%, 99%, 70%);
     padding: 0.6em 1.2em;
     border-radius: 1.5em;
     color: var(--neutral-700);
@@ -109,16 +109,14 @@ section nav a {
 
 nav a.focus {
     color: white;
-    border: none;
     background-color: transparent;
-    &:hover {
-        color: white;
-    }
 }
 
+/*
 nav a:hover ~ #indicator {
     background-color: var(--red-400);
 }
+*/
 
 nav #indicator {
     transition:
@@ -132,10 +130,6 @@ nav #indicator {
     background-color: var(--red-700);
     height: 0;
     z-index: -3;
-}
-
-section nav a:hover {
-    background-color: var(--neutral-200);
 }
 
 main {
