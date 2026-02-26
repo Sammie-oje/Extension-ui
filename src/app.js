@@ -18,22 +18,23 @@ window.onload = () => {
 const extensionCard = item => {
     return `
     <article class="extension-info" id="${item.name}">
-          <section class="extension-main">
-            <img src="${item.logo}" alt="${item.name}">
-            <div class="extension-text">
-              <h3>${item.name}</h3>
-              <p>${item.description}</p>
-            </div>
-          </section>
-          <div class="switch-wrapper">
-            <button class="remove-btn" onClick="showDialog()">Remove</button>
-            <div class="toggle-switch ${
+      <section class="extension-main">
+        <img src="${item.logo}" alt="${item.name}">
+        <div class="extension-text">
+          <h3>${item.name}</h3>
+          <p>${item.description}</p>
+        </div>
+      </section>
+      <div class="switch-wrapper">
+        <button class="remove-btn" onClick="showDialog()">Remove</button>
+        <div class="toggle-switch ${
                 item.isActive ? "active" : ""
             }" tabindex="0">
-              <div class="switch ${item.isActive ? "switch-active" : ""}" onClick="toggleSwitch(this)"></div>
-            </div>
+          <div class="switch ${item.isActive ? "switch-active" : ""}" onClick="toggleSwitch(this)">
           </div>
-        </article>
+        </div>
+      </div>
+    </article>
         `;
 };
 

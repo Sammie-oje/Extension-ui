@@ -49,6 +49,9 @@ header {
     border-radius: 0.5em;
     position: sticky;
     position: -webkit-sticky;
+    top: 0;
+    z-index: 100;
+    width: min(85%, 1920px);
 }
 
 /*.focus {
@@ -76,22 +79,22 @@ header button:hover {
     background-color: var(--neutral-300);
 }
 
-section {
+section.nav-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-flow: column nowrap;
     gap: 1.5em;
-    max-width: 85%;
     margin: 1.5em auto;
+    width: min(85%, 1920px);
 }
 
-section h3 {
+section.nav-section h3 {
     font: 700 2rem myFont;
     color: var(--neutral-900);
 }
 
-section nav {
+section.nav-section nav {
     position: relative;
 }
 
@@ -137,7 +140,7 @@ main {
     gap: 1em;
     place-items: center;
     margin: 0 auto 3em;
-    max-width: 85%;
+    width: min(85%, 1920px);
     position: relative;
 }
 
@@ -145,15 +148,21 @@ main {
     background-color: white;
     border-radius: 1em;
     padding: 1em 0;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.8em;
     min-width: 100%;
     min-height: 100%;
 }
 
 .extension-main {
+    width: 90%;
     display: flex;
     align-items: flex-start;
-    justify-content: center;
-    flex-flow: row nowrap;
+    justify-content: flex-start;
+    gap: 1em;
 }
 
 .extension-text h3 {
@@ -171,8 +180,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.5em;
-    margin-top: 1.5em;
+    width: 90%;
 }
 
 .remove-btn {
@@ -372,7 +380,7 @@ body.dark .active:hover {
 }
 /* Responsiveness */
 @media screen and (min-width: 700px) {
-    section {
+    section.nav-section {
         flex-flow: row nowrap;
     }
     main {
