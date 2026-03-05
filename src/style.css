@@ -396,9 +396,11 @@ body.dark .active:hover {
     section.nav-section {
         flex-flow: row nowrap;
     }
+
     main {
         grid-template-columns: 1fr 1fr;
     }
+
     .extension-info.transition {
         transform: scale(0.25);
         opacity: 0;
@@ -406,6 +408,13 @@ body.dark .active:hover {
         padding: 0;
         margin: 0;
         height: 100%;
+    }
+
+    .modal {
+        transition: all 0.1s ease allow-discrete;
+    }
+    .modal::backdrop {
+        transition: all 0.1s ease allow-discrete;
     }
 }
 
