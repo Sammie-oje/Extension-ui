@@ -137,6 +137,7 @@ nav #indicator {
 
 main {
     display: grid;
+    grid-template-columns: 1fr;
     gap: 1em;
     place-items: center;
     margin: 0 auto 3em;
@@ -153,8 +154,19 @@ main {
     justify-content: center;
     align-items: center;
     gap: 1.8em;
+    height: 180px;
+    margin: 0.6em;
     min-width: 100%;
     min-height: 100%;
+    transition: all 500ms ease-in-out;
+    overflow: hidden;
+}
+
+.extension-info.transition {
+    height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
 }
 
 .extension-main {
@@ -166,13 +178,13 @@ main {
 }
 
 .extension-text h3 {
-    font: 700 1.2rem myFont;
+    font: 700 1.2em myFont;
     color: var(--neutral-800);
     margin-bottom: 0.3em;
 }
 
 .extension-text p {
-    font: 500 0.9rem myFont;
+    font: 500 0.9em myFont;
     color: var(--neutral-600);
 }
 
@@ -298,6 +310,7 @@ main {
     color: var(--neutral-700);
     background-color: var(--neutral-300);
 }
+
 /* Active states for toggle switch */
 .active {
     background-color: var(--red-700);
@@ -384,7 +397,15 @@ body.dark .active:hover {
         flex-flow: row nowrap;
     }
     main {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
+    }
+    .extension-info.transition {
+        transform: scale(0.25);
+        opacity: 0;
+        max-height: 0;
+        padding: 0;
+        margin: 0;
+        height: 100%;
     }
 }
 

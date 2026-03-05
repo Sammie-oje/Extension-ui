@@ -17,7 +17,7 @@ window.onload = () => {
 
 const extensionCard = item => {
     return `
-    <article class="extension-info" id="${item.name}">
+    <article class="extension-info" id="${item.name}" style="view-transition-name: article-${item.id};">
       <section class="extension-main">
         <img src="${item.logo}" alt="${item.name}">
         <div class="extension-text">
@@ -26,10 +26,10 @@ const extensionCard = item => {
         </div>
       </section>
       <div class="switch-wrapper">
-        <button class="remove-btn" onClick="showDialog()">Remove</button>
+        <button class="remove-btn" onClick="showDialog(this)">Remove</button>
         <div class="toggle-switch ${
-                item.isActive ? "active" : ""
-            }" tabindex="0">
+            item.isActive ? "active" : ""
+        }" tabindex="0">
           <div class="switch ${item.isActive ? "switch-active" : ""}" onClick="toggleSwitch(this)">
           </div>
         </div>
@@ -109,10 +109,9 @@ const filterOnToggle = switchEl => {
         }
         return extension;
     });
-    console.log(updatedExtensionData);
 };
 
-window.showDialog = () => {
+window.showDialog = removeEl => {
     const dialog = document.createElement("dialog");
     dialog.className = "modal";
 
@@ -131,11 +130,28 @@ window.showDialog = () => {
 
     //Cleanup dialog
     const cancelBtn = dialog.querySelector("#cancel-btn");
-    cancelBtn.addEventListener("click", () => {
+    cancelBtn.addEventListener("transitionend", () => {
         //Remove from the UI
         dialog.close();
         //Remove from the DOM
         dialog.remove();
+    });
+
+    const continueBtn = dialog.querySelector("#continue-btn");
+    continueBtn.addEventListener("transitionend", () => {
+        //Remove from the UI
+        dialog.close();
+        //Remove from the DOM
+        dialog.remove();
+        animateExtensionOnExit(removeEl);
+    });
+};
+
+const animateExtensionOnExit = removeEl => {
+    const articleEl = removeEl.closest("article");
+    articleEl.classList.add("transition");
+    articleEl.addEventListener("transitionend", () => {
+        document.startViewTransition(() => articleEl.remove());
     });
 };
 
