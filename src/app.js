@@ -17,7 +17,7 @@ window.onload = () => {
 
 const extensionCard = item => {
     return `
-    <article class="extension-info" id="${item.name}" style="view-transition-name: article-${item.id};">
+    <article class="extension-info" id="${item.name}" >
       <section class="extension-main">
         <img src="${item.logo}" alt="${item.name}">
         <div class="extension-text">
@@ -151,7 +151,7 @@ const animateExtensionOnExit = removeEl => {
     const articleEl = removeEl.closest("article");
     articleEl.classList.add("transition");
     articleEl.addEventListener("transitionend", () => {
-        document.startViewTransition(() => articleEl.remove());
+        articleEl.remove();
     });
 };
 
